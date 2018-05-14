@@ -17,29 +17,45 @@ app.use(function (req, res, next) {
     next();
 });
 
+//ffmpeg -i /dev/video0 -framerate 60 -video_size 640x480 out.mkv
 //ffmpeg -re -i video.mp4 -c copy -flags +global_header -f flv rtmp://video-center-sg.alivecdn.com/AppName/StreamName?vhost=livevideo.wearexenon.com
 
+var getWebCam = spawn('ffmpeg', ['-i', '/dev/video0', '-framerate', '30', '-video_size', '320x240', 'out.mkv']);
+// input_file.pipe(ffmpeg.stdin);
+// ffmpeg.stdout.pipe(output_stream);
+getWebCam.stderr.on('data', function (data) {
+    console.log(data.toString());
+});
+getWebCam.stderr.on('end', function () {
+    console.log('webcam stopped!');
+});
+getWebCam.stderr.on('exit', function () {
+    console.log('child process exited');
+});
+getWebCam.stderr.on('close', function() {
+    console.log('...closing time! bye');
+});
+
+
+var pushStream = spawn('ffmpeg', ['-re', '-i', 'out.mkv', '-c', 'copy', '-flags', '+global_header', '-f', 'flv', 'rtmp://video-center-sg.alivecdn.com/AppName/StreamName?vhost=livevideo.wearexenon.com']);
+// input_file.pipe(ffmpeg.stdin);
+// ffmpeg.stdout.pipe(output_stream);
+pushStream.stderr.on('data', function (data) {
+    console.log(data.toString());
+});
+pushStream.stderr.on('end', function () {
+    console.log('file has been converted succesfully');
+});
+pushStream.stderr.on('exit', function () {
+    console.log('child process exited');
+});
+pushStream.stderr.on('close', function() {
+    console.log('...closing time! bye');
+});
+
+
+
 app.use(function(req, res) {
-
-    var command = spawn('ffmpeg', ['-re', '-i', '../video.mp4', '-c', 'copy', '-flags', '+global_header', '-f', 'flv', 'rtmp://video-center-sg.alivecdn.com/AppName/StreamName?vhost=livevideo.wearexenon.com']);
-    // input_file.pipe(ffmpeg.stdin);
-    // ffmpeg.stdout.pipe(output_stream);
-
-    command.stderr.on('data', function (data) {
-        console.log(data.toString());
-    });
-
-    command.stderr.on('end', function () {
-        console.log('file has been converted successfully');
-    });
-
-    command.stderr.on('exit', function () {
-        console.log('child process exited');
-    });
-
-    command.stderr.on('close', function() {
-        console.log('...closing time! bye');
-    });
 
 });
 
