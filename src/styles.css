@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+.gutter-0.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+.gutter-0 > [class^="col-"]{
+    padding-right: 0;
+    padding-left: 0;
+}

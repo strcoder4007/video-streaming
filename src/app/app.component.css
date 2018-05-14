@@ -1,0 +1,21 @@
+.row {
+    background-color: whitesmoke;
+}
+
+.container {
+    background-color: whitesmoke;
+    text-align: center;
+}
+
+#video {
+    width: 100%;
+    height: auto;
+    background-color: #666;
+}
+#videoElement {
+    max-width: 100%;
+    max-height: auto;
+    width: 100%;
+    height: auto;
+    background-color: #666;
+}
